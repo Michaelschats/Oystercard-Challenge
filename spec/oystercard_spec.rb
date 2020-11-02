@@ -17,4 +17,13 @@ describe '#top_up' do
     expect{ subject.top_up 1}.to raise_error "Limit Reached"
   end
 end
+describe '#deduct' do
+  it "Responds to deduct method with one argument" do
+    expect(subject).to respond_to(:deduct).with(1).argument
+  end
+  it "Deducts the overall balance by certain value" do
+    subject.top_up(2)
+    expect{ subject.deduct 1}.to change {subject.balance }.by -1
+  end
+end
 end
