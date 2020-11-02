@@ -4,4 +4,15 @@ describe Oystercard do
   it "Default balance starts at 0" do
     expect(subject.balance).to eq 0
   end
+describe '#top_up' do
+  it "Responds to Top_up method" do
+    expect(subject).to respond_to(:top_up).with(1).argument
+  end
+  it "Add money to the card" do
+    expect{ subject.top_up 1 }.to change { subject.balance }.by 1
+  end
+  it "Raise an error when balance exceeds 90" do
+    expect{ subject.top_up 91}.to raise_error "Limit Reached"
+  end
+end
 end
