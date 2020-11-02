@@ -32,13 +32,20 @@ describe "#in_journey?" do
     expect(subject).not_to be_in_journey
   end
   it 'can touch in' do
+    subject.top_up(5)
     subject.touch_in
     expect(subject).to be_in_journey
   end
   it 'can touch out' do
+    subject.top_up(5)
     subject.touch_in
     subject.touch_out
     expect(subject).not_to be_in_journey
+  end
+end
+describe '#touch_in' do
+  it "if balance less than 1 raise an error" do
+    expect{ subject.touch_in }.to raise_error "Insufficient Funds"
   end
 end
 end
