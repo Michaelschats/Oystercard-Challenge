@@ -9,7 +9,7 @@ def initialize
 end
 
 def top_up(value)
-  raise "Limit Reached" if (@balance + value) > MAXIMUM_BALANCE
+  raise "Maximum Balance of #{MAXIMUM_BALANCE} Reached" if (@balance + amount) > MAXIMUM_BALANCE
   @balance += value
 end
 

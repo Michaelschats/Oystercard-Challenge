@@ -14,7 +14,7 @@ describe '#top_up' do
   it "Raise an error when balance exceeds 90" do
     maximum_balance = Oystercard::MAXIMUM_BALANCE
     subject.top_up(maximum_balance)
-    expect{ subject.top_up 1}.to raise_error "Limit Reached"
+    expect{ subject.top_up 1}.to raise_error "Maximum Balance of #{maximum_balance} Reached"
   end
 end
 describe '#deduct' do
