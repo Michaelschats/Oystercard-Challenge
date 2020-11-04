@@ -1,6 +1,16 @@
 require './lib/oystercard'
 
 describe Oystercard do
+  let(:entry_station){ double :station}
+  let(:exit_station){ double :station}
+  let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
+
+  it "stores the entry stations" do
+    subject.top_up(5)
+    subject.touch_in(entry_station)
+    expect(subject.entry_station).to eq entry_station
+  end
+
   it "Default balance starts at 0" do
     expect(subject.balance).to eq 0
   end
@@ -17,35 +27,49 @@ describe '#top_up' do
     expect{ subject.top_up 1}.to raise_error "Maximum Balance of #{maximum_balance} Reached"
   end
 end
-describe '#deduct' do
-  it "Responds to deduct method with one argument" do
-    expect(subject).to respond_to(:deduct).with(1).argument
-  end
-  it "Deducts the overall balance by certain value" do
-    subject.top_up(2)
-    expect{ subject.deduct 1}.to change {subject.balance }.by -1
-  end
-end
 
 describe "#in_journey?" do
   it 'is initiially not in a journey' do
     expect(subject).not_to be_in_journey
   end
-  it 'can touch in' do
+
+  it 'Returning Journey is finished by empty entry station ' do
     subject.top_up(5)
-    subject.touch_in
-    expect(subject).to be_in_journey
-  end
-  it 'can touch out' do
-    subject.top_up(5)
-    subject.touch_in
-    subject.touch_out
-    expect(subject).not_to be_in_journey
+    subject.touch_in(entry_station)
+    subject.touch_out(exit_station)
+    expect(subject.in_journey?).to eq(false).or eq(true)
   end
 end
 describe '#touch_in' do
   it "if balance less than 1 raise an error" do
-    expect{ subject.touch_in }.to raise_error "Insufficient Funds"
+    expect{ subject.touch_in(entry_station) }.to raise_error "Insufficient Funds"
   end
+end
+describe '#touch_out' do
+  it "Reduces balance when touch_out method is called" do
+    expect{ subject.touch_out(exit_station)}.to change{ subject.balance}.by (-Oystercard::MINIMUM_BALANCE)
+  end
+  it "returns entry station to nil" do
+    subject.top_up(5)
+    subject.touch_in(entry_station)
+    subject.touch_out(exit_station)
+    expect( subject.touch_out(exit_station)).to eq @entry_station = nil
+  end
+  it "accepts exit stations as an argument" do
+    subject.top_up(5)
+    subject.touch_in(entry_station)
+    expect(subject).to respond_to(:touch_out).with(1).argument
+  end
+describe '#trip_history' do
+  it "trip history is empty" do
+    expect(subject.trip_history).to eq []
+  end
+  it "Checks that a journey has been added to Trip History" do
+    subject.top_up(5)
+    subject.touch_in(entry_station)
+    subject.touch_out(exit_station)
+    expect(subject.trip_history).not_to be_empty
+  end
+end
 end
 end
