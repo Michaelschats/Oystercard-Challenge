@@ -29,7 +29,7 @@ def touch_out(exit_station)
   @in_use = false
   deduct(MINIMUM_BALANCE)
   @exit_station = exit_station
-  @trip_history << {entry_station: @entry_station, exit_station: @exit_station}
+  add_trip_history
 
   @entry_station = nil
 end
@@ -43,4 +43,9 @@ private
 def deduct(value)
   @balance -= value
 end
+
+def add_trip_history
+  @trip_history << {entry_station: @entry_station, exit_station: @exit_station}
+end
+
 end

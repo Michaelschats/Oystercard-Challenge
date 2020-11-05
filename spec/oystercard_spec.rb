@@ -29,7 +29,7 @@ describe '#top_up' do
 end
 
 describe "#in_journey?" do
-  it 'is initiially not in a journey' do
+  it 'is initially not in a journey' do
     expect(subject).not_to be_in_journey
   end
 
