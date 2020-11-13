@@ -1,9 +1,7 @@
-feature 'Enter names' do
-  scenario 'Player names are displayed' do
-    visit('/')
-    fill_in :player_1_name, with: 'Dave'
-    fill_in :player_2_name, with: 'Michael'
-    click_button 'Submit'
-    expect(page).to have_content 'Dave vs Michael'
+
+feature 'Display names on home page' do
+  scenario 'can run app and check names are visible' do
+    sign_in_and_play
+    expect(page).to have_content('Mike vs Sean')
   end
 end
